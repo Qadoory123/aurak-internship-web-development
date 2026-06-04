@@ -1,47 +1,47 @@
+console.log("JS loaded");
+
+document.getElementById("addBtn").addEventListener("click", addTask);
+document.getElementById("taskInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") addTask();
+});
+
 function addTask() {
-    let input = document.getElementById("taskInput");
-    let taskText = input.value.trim();
+  let input = document.getElementById("taskInput");
+  let taskText = input.value.trim();
 
-    if (taskText === "") {
-        alert("Please enter a task");
-        return;
-    }
+  if (taskText === "") {
+    alert("Please enter a task");
+    return;
+  }
 
-    let li = document.createElement("li");
+  let li = document.createElement("li");
 
-    let span = document.createElement("span");
-    span.textContent = taskText;
+  let check = document.createElement("div");
+  check.className = "check";
 
-    // STATUS BUTTON (Done / Not Done)
-    let statusBtn = document.createElement("button");
-    statusBtn.textContent = "Mark Done";
+  let checkIcon = document.createElement("i");
+  checkIcon.className = "ti ti-check check-icon";
+  check.appendChild(checkIcon);
 
-    statusBtn.onclick = function () {
-        if (span.style.textDecoration === "line-through") {
-            span.style.textDecoration = "none";
-            statusBtn.textContent = "Mark Done";
-        } else {
-            span.style.textDecoration = "line-through";
-            statusBtn.textContent = "Mark Undone";
-        }
-    };
+  check.onclick = function() {
+    li.classList.toggle("completed");
+  };
 
-    // DELETE BUTTON
-    let deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
+  let span = document.createElement("span");
+  span.textContent = taskText;
 
-    deleteBtn.onclick = function () {
-        li.remove();
-    };
+  let deleteBtn = document.createElement("button");
+  deleteBtn.className = "del-btn";
+  deleteBtn.textContent = "Delete";
+  deleteBtn.onclick = function() {
+    li.remove();
+  };
 
-    // styling container inside each task
-    span.style.marginRight = "10px";
+  li.appendChild(check);
+  li.appendChild(span);
+  li.appendChild(deleteBtn);
+  document.getElementById("taskList").appendChild(li);
 
-    li.appendChild(span);
-    li.appendChild(statusBtn);
-    li.appendChild(deleteBtn);
-
-    document.getElementById("taskList").appendChild(li);
-
-    input.value = "";
+  input.value = "";
+  input.focus();
 }
