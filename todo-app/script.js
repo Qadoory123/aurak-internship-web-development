@@ -1,47 +1,81 @@
-console.log("JS loaded");
+const taskInput = document.getElementById("taskInput");
+const taskList = document.getElementById("taskList");
+const addBtn = document.getElementById("addBtn");
 
-document.getElementById("addBtn").addEventListener("click", addTask);
-document.getElementById("taskInput").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") addTask();
+let tasks = [];
+
+addBtn.addEventListener("click", addTask);
+
+taskInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        addTask();
+    }
 });
 
 function addTask() {
-  let input = document.getElementById("taskInput");
-  let taskText = input.value.trim();
+    const taskText = taskInput.value.trim();
 
-  if (taskText === "") {
-    alert("Please enter a task");
-    return;
-  }
+    if (taskText === "") {
+        alert("Please enter a task");
+        return;
+    }
 
-  let li = document.createElement("li");
+    tasks.push({
+        text: taskText,
+        completed: false
+    });
 
-  let check = document.createElement("div");
-  check.className = "check";
+    taskInput.value = "";
+    renderTasks();
+}
 
-  let checkIcon = document.createElement("i");
-  checkIcon.className = "ti ti-check check-icon";
-  check.appendChild(checkIcon);
+function toggleTask(index) {
+    tasks[index].completed = !tasks[index].completed;
+    renderTasks();
+}
 
-  check.onclick = function() {
-    li.classList.toggle("completed");
-  };
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    renderTasks();
+}
 
-  let span = document.createElement("span");
-  span.textContent = taskText;
+function renderTasks() {
+    taskList.innerHTML = "";
 
-  let deleteBtn = document.createElement("button");
-  deleteBtn.className = "del-btn";
-  deleteBtn.textContent = "Delete";
-  deleteBtn.onclick = function() {
-    li.remove();
-  };
+    tasks.forEach((task, index) => {
+        const li = document.createElement("li");
 
-  li.appendChild(check);
-  li.appendChild(span);
-  li.appendChild(deleteBtn);
-  document.getElementById("taskList").appendChild(li);
+        if (task.completed) {
+            li.classList.add("completed");
+        }
 
-  input.value = "";
-  input.focus();
+        const check = document.createElement("div");
+        check.className = "check";
+
+        const checkIcon = document.createElement("i");
+        checkIcon.className = "ti ti-check check-icon";
+
+        check.appendChild(checkIcon);
+
+        check.addEventListener("click", () => {
+            toggleTask(index);
+        });
+
+        const span = document.createElement("span");
+        span.textContent = task.text;
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "del-btn";
+        deleteBtn.textContent = "Delete";
+
+        deleteBtn.addEventListener("click", () => {
+            deleteTask(index);
+        });
+
+        li.appendChild(check);
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+
+        taskList.appendChild(li);
+    });
 }
