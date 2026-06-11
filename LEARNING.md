@@ -150,3 +150,65 @@ async function loadUsers() {
 ### How It All Connects
 
 When `fetch()` is called, the browser sends a request to the API URL. The server responds with JSON data. `.json()` converts that into a JavaScript object. The data is then available inside the function and can be used to create elements and update the page dynamically without any page refresh.
+
+## Component-Based Thinking
+
+A component is a self-contained, reusable piece of UI that combines three things:
+- **UI** — the HTML structure it produces
+- **Data** — the information passed into it
+- **Behavior** — any events or interactions it handles
+
+Modern applications are built from components because it avoids repeating the same code. Instead of writing the same card layout ten times, you write it once as a function and call it with different data each time. This makes the codebase easier to read, update, and scale.
+
+Example:
+```javascript
+function createUserCard(user) {
+  const card = document.createElement("div");
+  card.textContent = user.name;
+  return card;
+}
+```
+
+## Separation of Concerns
+
+Separation of concerns means each file has one clear responsibility:
+- **HTML** → defines the structure of the page
+- **CSS** → controls how the page looks
+- **JavaScript** → handles behavior and logic
+
+Keeping these separate means a change in styling does not risk breaking the logic, and a change in logic does not affect the structure. As projects grow, this separation becomes essential for maintainability.
+
+## Reusable UI Functions
+
+A reusable UI function receives data, builds a DOM element, and returns it. The same function can be called many times with different inputs, producing consistent output each time without duplicating code.
+
+Example:
+```javascript
+function createUserCard(user) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `${user.name}${user.email}`;
+  return card;
+}
+```
+
+## Project Organization
+
+Small web applications are typically structured into folders by responsibility:
+
+```
+project/
+├── index.html
+├── css/
+│   └── style.css
+├── js/
+│   ├── api.js
+│   └── ui.js
+└── assets/
+```
+
+- `api.js` handles all fetch requests and error handling
+- `ui.js` handles creating elements and updating the page
+- `index.html` only contains the page structure
+
+This structure means anyone opening the project immediately knows where each type of logic lives, and adding new features does not require searching through one large file.
