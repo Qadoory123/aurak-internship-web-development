@@ -212,3 +212,93 @@ project/
 - `index.html` only contains the page structure
 
 This structure means anyone opening the project immediately knows where each type of logic lives, and adding new features does not require searching through one large file.
+
+## React Fundamentals
+
+### What is React and Why Frameworks Replaced Manual DOM Manipulation
+React is a JavaScript library for building user interfaces. Instead of manually creating and updating DOM elements step by step, you describe what the UI should look like for a given set of data, and React handles creating, updating, and removing the actual DOM nodes. This is called a declarative approach, compared to the imperative approach used in vanilla JavaScript. Frameworks like React exist because manually keeping the DOM in sync with changing data becomes harder to manage as an application grows.
+
+### React vs the Vanilla Component Approach
+The `createUserCard(user)` function used in the Data Viewer project already followed the idea of a component: a function that takes data and returns a piece of UI. The difference is that `createUserCard` built a real DOM node directly using `document.createElement`, while a React component returns a JSX description of the UI, and React converts that description into actual DOM nodes itself.
+
+```javascript
+// Vanilla
+function createUserCard(user) {
+  const div = document.createElement("div");
+  div.className = "user-card";
+  div.innerHTML = `<h3>${user.name}</h3><p>${user.email}</p>`;
+  return div;
+}
+```
+
+```jsx
+// React
+function Card({ user }) {
+  return (
+    <div className="user-card">
+      <h3>{user.name}</h3>
+      <p>{user.email}</p>
+    </div>
+  );
+}
+```
+
+### JSX
+JSX is a syntax extension that allows writing markup-like code directly inside JavaScript. It looks like HTML, but it is compiled into regular JavaScript function calls behind the scenes. A few differences from HTML: attributes use camelCase, such as `className` instead of `class`, curly braces `{}` allow JavaScript expressions to be inserted into the markup, and every component must return a single root element (or a Fragment `<>...</>`).
+
+```jsx
+function Welcome() {
+  return <h1>Hello there</h1>;
+}
+```
+
+### Components (Function Components)
+A function component is a regular JavaScript function that returns JSX describing a piece of UI. Component names must start with a capital letter so React can tell them apart from regular HTML tags. Components let UI be broken into small, reusable, independent pieces, similar to how `createUserCard` was reused for every user, but with React managing the rendering.
+
+### Props
+Props are how data is passed from a parent component into a child component, similar to how `createUserCard(user)` received `user` as a function argument. In JSX, data is passed through attributes, which React collects into a single `props` object inside the component.
+
+```jsx
+function App() {
+  const user1 = { name: "Leanne Graham", email: "Sincere@april.biz" };
+  return <Card user={user1} />;
+}
+```
+
+Props flow in one direction only, from parent to child. A component can read its props but cannot change them.
+
+### Rendering Lists with .map()
+`.map()` is used instead of `.forEach()` to render lists in React, because `.map()` returns a new array, which is required for JSX to render the result. `forEach()` only runs a function for each item and returns nothing, so it cannot be used directly inside JSX.
+
+```jsx
+function App({ users }) {
+  return (
+    <div className="grid">
+      {users.map(user => (
+        <Card key={user.id} user={user} />
+      ))}
+    </div>
+  );
+}
+```
+
+Each item in a rendered list needs a unique `key` prop so React can track which item is which across re-renders.
+
+### Basic Project Structure
+A typical Vite + React project looks like this:
+
+```
+my-first-react-app/
+├── index.html
+├── package.json
+├── vite.config.js
+└── src/
+    ├── main.jsx
+    ├── App.jsx
+    ├── App.css
+    ├── index.css
+    └── components/
+        └── Card.jsx
+```
+
+`index.html` contains only a single empty `<div id="root"></div>`, unlike the Data Viewer project where the HTML had visible structure. `main.jsx` is the entry point that renders `App` into that root div. `App.jsx` is the main component, and `components/` is a folder used by convention to organize reusable pieces like `Card.jsx`.
