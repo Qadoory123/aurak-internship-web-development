@@ -1,19 +1,33 @@
-import Card from './components/Card';
-import './App.css';
-
-const users = [
-  { id: 1, name: "Leanne Graham", email: "Sincere@april.biz", university: "AURAK" },
-  { id: 2, name: "Ervin Howell", email: "Shanna@melissa.tv", university: "AUS" },
-  { id: 3, name: "Clementine Bauch", email: "Nathan@yesenia.net", university: "ADU" },
-  { id: 4, name: "Patricia Lebsack", email: "Julianne.OConner@kory.org", university: "UOWD" },
-];
+import { useState } from "react";
+import Card from "./components/Card";
+import "./App.css";
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const users = [
+    // keep your existing users array exactly as it is
+  ];
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="grid">
-      {users.map(user => (
-        <Card key={user.id} user={user} />
-      ))}
+    <div className="app">
+      <h1>User Directory</h1>
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
+      <div className="card-grid">
+        {filteredUsers.map((user) => (
+          <Card key={user.id} user={user} />
+        ))}
+      </div>
     </div>
   );
 }
