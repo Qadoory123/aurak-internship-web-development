@@ -302,3 +302,15 @@ my-first-react-app/
 ```
 
 `index.html` contains only a single empty `<div id="root"></div>`, unlike the Data Viewer project where the HTML had visible structure. `main.jsx` is the entry point that renders `App` into that root div. `App.jsx` is the main component, and `components/` is a folder used by convention to organize reusable pieces like `Card.jsx`.
+
+## React State Fundamentals
+
+State is data that a component manages internally and that can change over time. Unlike props, which are passed into a component from its parent and cannot be changed by the component itself, state belongs to the component and is fully controlled by it. When state changes, React automatically re-renders the component to reflect the new value, so the UI always stays in sync with the data.
+
+The useState hook is how state is declared in a function component. Calling useState(initialValue) returns an array with two items: the current value and a function to update it. The common pattern is array destructuring, for example const [searchTerm, setSearchTerm] = useState(""). Calling the setter function (setSearchTerm) updates the state and tells React to re-render the component with the new value.
+
+React re-renders automatically because state updates trigger React to re-run the component function and compare the new output to what is currently on screen, updating only what changed. This is different from Vanilla JavaScript, where I had to manually select elements with querySelector and update them with innerHTML or class toggling every time something changed.
+
+Events in React are handled using props like onClick and onChange, which take a function instead of a string like in HTML. For example, onChange={(e) => setSearchTerm(e.target.value)} runs every time the input value changes and updates state with the new text.
+
+The core difference: props are data passed in from outside and are read-only from the component's perspective, while state is data a component owns and can update itself, which is what makes interactivity possible.
