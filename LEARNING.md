@@ -314,3 +314,57 @@ React re-renders automatically because state updates trigger React to re-run the
 Events in React are handled using props like onClick and onChange, which take a function instead of a string like in HTML. For example, onChange={(e) => setSearchTerm(e.target.value)} runs every time the input value changes and updates state with the new text.
 
 The core difference: props are data passed in from outside and are read-only from the component's perspective, while state is data a component owns and can update itself, which is what makes interactivity possible.
+
+## useEffect & Live Data
+
+### What is a Side Effect in React?
+
+A side effect is anything a component does that reaches outside its own render cycle — fetching data from an API, setting a page title, starting a timer, or writing to local storage. These are called side effects because they affect something outside the component itself, not just what React renders on screen. Fetching data is the most common side effect in real applications, because the component needs to go out to a server, wait for a response, and then update its own state with the result.
+
+### The useEffect Hook
+
+`useEffect` is the React hook designed for running side effects. It takes two arguments: an effect function and a dependency array.
+
+```jsx
+useEffect(() => {
+  // side effect runs here
+}, []);
+```
+
+The dependency array controls when the effect re-runs. An empty array `[]` means the effect runs once, when the component first mounts (appears on screen), and never again after that. This is the correct choice for a one-time data fetch on page load. If the array is left out entirely, the effect runs after every single render, which causes infinite re-renders when fetching data — because fetch updates state, state causes a re-render, and the re-render triggers another fetch.
+
+### Why fetch Must Not Be Called in the Component Body
+
+If `fetch` is called directly in the component body (outside `useEffect`), it runs every time the component renders. When the data arrives and `setState` is called, that triggers a re-render, which calls `fetch` again, which triggers another render — an infinite loop. Wrapping the fetch inside `useEffect` with `[]` breaks that cycle by ensuring the fetch runs only once.
+
+### The Three States of a Data Fetch
+
+Every fetch request has three possible outcomes, and a real application must handle all three:
+
+- **Loading** — the request has been sent but no response has arrived yet. The UI should show a loading indicator so the user knows something is happening.
+- **Success (data)** — the response arrived and the data was parsed successfully. The UI should render the data.
+- **Error** — something went wrong, whether a bad URL, no internet connection, or a server failure. The UI should show a clear error message instead of leaving the user with a blank screen.
+
+Handling only the success case (the happy path) is a common mistake. The other two states are just as real, and ignoring them makes an application feel broken when conditions are not perfect.
+
+```jsx
+const [users, setUsers] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
+
+useEffect(() => {
+  async function fetchUsers() {
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/users');
+      if (!response.ok) throw new Error('Request failed');
+      const data = await response.json();
+      setUsers(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchUsers();
+}, []);
+```
