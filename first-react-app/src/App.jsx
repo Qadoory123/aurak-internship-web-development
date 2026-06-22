@@ -1,40 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "./components/Card";
 import "./App.css";
 
-const users = [
-  {
-    id: 1,
-    name: "Leanne Graham",
-    email: "Sincere@april.biz",
-    university: "AURAK",
-  },
-  {
-    id: 2,
-    name: "Ervin Howell",
-    email: "Shanna@melissa.tv",
-    university: "AUS",
-  },
-  {
-    id: 3,
-    name: "Clementine Bauch",
-    email: "Nathan@yesenia.net",
-    university: "ADU",
-  },
-  {
-    id: 4,
-    name: "Patricia Lebsack",
-    email: "Julianne.OConner@kory.org",
-    university: "UOWD",
-  },
-];
-
 function App() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        if (!response.ok) throw new Error("Failed to fetch users");
+        const data = await response.json();
+        setUsers(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchUsers();
+  }, []);
 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) return <p className="status-message">Loading...</p>;
+  if (error) return <p className="status-message">Something went wrong: {error}</p>;
 
   return (
     <div className="page">
