@@ -368,3 +368,13 @@ useEffect(() => {
   fetchUsers();
 }, []);
 ```
+
+Controlled Forms & Input Validation
+What a controlled component is
+A controlled component is a form input where React state is the single source of truth for the input's value. Instead of letting the browser manage what's typed, you bind the input's value to a state variable and update that variable on every keystroke through onChange. This means the input always reflects exactly what's in state, and state always reflects exactly what's in the input. The two stay in sync at all times.
+Why controlled inputs are preferred over reading the DOM directly
+In vanilla JavaScript, reading a form field means querying the DOM at the moment of submission to find out what the user typed. With controlled inputs, you always have the current value in state without touching the DOM at all. This makes validation easier because you can check state at any point, not just on submit. It also makes clearing the form straightforward: reset the state variables and the inputs clear automatically. The component becomes predictable because the UI is always a direct reflection of state.
+Handling form submission in React
+Form submission is handled through the onSubmit prop on the <form> element. The handler receives an event object, and calling e.preventDefault() is the first thing you do inside it. Without that call, the browser's default behavior fires, which reloads the page and wipes the React state. After preventing the default, the handler runs the validation logic and processes the form data.
+Basic validation
+Validation checks run inside the onSubmit handler before anything is added to the list. Required field checks confirm that no state variable is an empty string after trimming whitespace. A basic email format check uses a regular expression to confirm the value contains an @ and a domain. If any check fails, an error message is stored in a separate state variable and displayed inline next to the relevant field. If all checks pass, the new entry is added to the list and the form fields are cleared by resetting each state variable to an empty string.
