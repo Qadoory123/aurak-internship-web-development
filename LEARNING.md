@@ -385,3 +385,26 @@ Form submission is handled through the `onSubmit` prop on the `<form>` element. 
 **Basic validation**
 
 Validation checks run inside the `onSubmit` handler before anything is added to the list. Required field checks confirm that no state variable is an empty string after trimming whitespace. A basic email format check uses a regular expression to confirm the value contains an `@` and a domain. If any check fails, an error message is stored in a separate state variable and displayed inline next to the relevant field. If all checks pass, the new entry is added to the list and the form fields are cleared by resetting each state variable to an empty string.
+
+## React Router & Client-Side Routing
+
+### What Client-Side Routing Is
+
+In a traditional website, clicking a link sends a request to the server and the browser loads a completely new HTML page. In a Single-Page Application (SPA), the browser loads one HTML file once and JavaScript handles everything after that. Client-side routing means React intercepts URL changes, matches the new path to a component, and swaps what is displayed on screen, all without a full page reload. The server is never contacted again just to navigate between views. This makes navigation feel instant and preserves all React state across page changes.
+
+### React Router Basics
+
+React Router is the standard library for adding routing to React apps. The four core pieces are:
+
+- `BrowserRouter` wraps the entire app and gives React Router access to the browser's URL history API.
+- `Routes` is a container that looks at the current URL and renders only the first `Route` that matches.
+- `Route` maps a specific path (like `/about`) to a component that should render when that path is active.
+- `Link` renders a navigation element that updates the URL without reloading the page.
+
+### Route Parameters
+
+A route like `/users/:id` uses `:id` as a dynamic segment. The colon tells React Router that this part of the URL is a variable, not a fixed string. When a user visits `/users/4`, React Router captures `4` and makes it available inside the component through the `useParams` hook. Calling `useParams()` returns an object like `{ id: "4" }`, which can then be used to find and display the matching record.
+
+### Link vs a Tag
+
+A standard HTML `<a href="/about">` tag causes a full browser navigation. The current page is unloaded, a new request goes to the server, and the entire React app restarts from scratch, wiping all state. A React Router `<Link to="/about">` intercepts the click, updates the browser's URL using the History API, and tells React Router to re-render the correct component, with no server request and no page reload. Using `<a>` tags for internal navigation in a React app defeats the purpose of client-side routing entirely.
