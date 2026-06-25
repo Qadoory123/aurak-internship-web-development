@@ -408,3 +408,17 @@ A route like `/users/:id` uses `:id` as a dynamic segment. The colon tells React
 ### Link vs a Tag
 
 A standard HTML `<a href="/about">` tag causes a full browser navigation. The current page is unloaded, a new request goes to the server, and the entire React app restarts from scratch, wiping all state. A React Router `<Link to="/about">` intercepts the click, updates the browser's URL using the History API, and tells React Router to re-render the correct component, with no server request and no page reload. Using `<a>` tags for internal navigation in a React app defeats the purpose of client-side routing entirely.
+
+## Integration & Portfolio Polish
+
+### Clean Project Structure
+Refactoring means reorganizing code without changing what it does. A professional React app separates concerns into a `components/` folder for reusable pieces (like `Card.jsx`) and a `pages/` folder for full views (like `Home.jsx`, `UserDetail.jsx`, `About.jsx`). Each file holds one component, nothing more. Keeping files small and focused makes the codebase easier to navigate, debug, and hand off to another developer.
+
+### Loading, Empty, and Error States
+Every view that fetches data or depends on user input needs three states handled: loading (a spinner or message while waiting), empty (a helpful prompt when no results match), and error (a clear message if something goes wrong). Skipping any of these leaves users with a broken or confusing experience. Handling all three is one of the clearest signals that a project is production-ready rather than just a demo.
+
+### What Makes a Good README
+A strong README includes a short project description, a feature list, the tech stack, screenshots, and step-by-step run instructions. It answers the question a recruiter or developer would ask before opening the code: what does this do, and how do I see it?
+
+### Why a Live Link Matters
+A deployed link lets anyone open the app in seconds without cloning, installing dependencies, or running a dev server. To a recruiter reviewing dozens of portfolios, the difference between a live link and a GitHub folder can decide whether they look further.
