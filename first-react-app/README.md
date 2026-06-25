@@ -29,19 +29,19 @@ This is a free public REST API that returns 10 fake users, each with a name, ema
 
 > Home page with user cards and search
 
-![Home Page](screenshots/home.png)
+![Home Page](assets/screenshots/home.png)
 
 > User cards displayed on the Home page
 
-![User Cards](screenshots/users.png)
+![User Cards](assets/screenshots/users.png)
 
 > User detail page
 
-![User Detail](screenshots/detail.png)
+![User Detail](assets/screenshots/detail.png)
 
 > About page
 
-![About Page](screenshots/Aboutpage.png)
+![About Page](assets/screenshots/Aboutpage.png)
 
 ## How to Run
 
