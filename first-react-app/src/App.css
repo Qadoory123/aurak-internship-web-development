@@ -243,3 +243,15 @@ body {
 .back-link:hover {
   color: #000;
 }
+
+.status-message {
+  text-align: center;
+  color: #6b7280;
+  font-size: 15px;
+  margin-top: 60px;
+}
+
+.navbar a:first-child {
+  color: #4f46e5;
+  font-size: 18px;
+}
