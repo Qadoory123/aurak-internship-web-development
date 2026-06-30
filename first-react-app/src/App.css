@@ -255,3 +255,41 @@ body {
   color: #4f46e5;
   font-size: 18px;
 }
+
+.navbar {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.navbar.light {
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+.navbar.dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.user-card.dark {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+
+.user-card.dark h3 {
+  color: #ffffff;
+}
+
+.user-card.dark p {
+  color: #cccccc;
+}
+
+.home.dark,
+.about.dark,
+.user-detail.dark {
+  background-color: #121212;
+  color: #f0f0f0;
+  min-height: 100vh;
+}
