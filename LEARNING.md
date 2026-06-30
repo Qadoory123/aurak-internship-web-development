@@ -422,3 +422,46 @@ A strong README includes a short project description, a feature list, the tech s
 
 ### Why a Live Link Matters
 A deployed link lets anyone open the app in seconds without cloning, installing dependencies, or running a dev server. To a recruiter reviewing dozens of portfolios, the difference between a live link and a GitHub folder can decide whether they look further.
+
+## Context API & Global State
+
+### What is Prop Drilling
+
+Prop drilling happens when data needs to pass from a top-level component down to a deeply nested one, forcing every component in between to accept and forward that prop, even if it never uses it itself. As an app grows, this becomes painful: adding a new shared value means touching every file in the chain, and it gets harder to track where a prop actually came from versus where it's just passing through.
+
+### What the Context API Solves
+
+The Context API is React's built-in solution to prop drilling. It lets you define a piece of state once and make it available to any component in the tree, no matter how deeply nested, without manually passing it through props at every level.
+
+### The Three Pieces
+
+- `createContext()` creates the context object itself, an empty container for the shared value.
+- A **Provider** component wraps the part of the app that needs access (usually the whole app, in `App.jsx`), holds the actual state with `useState`, and passes it down through the `value` prop.
+- `useContext(MyContext)` is called inside any component that needs to read or update that state, returning the current value directly regardless of how deep that component sits in the tree.
+
+```jsx
+const ThemeContext = createContext();
+
+function App() {
+  const [theme, setTheme] = useState("light");
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <Navbar />
+      <Cards />
+    </ThemeContext.Provider>
+  );
+}
+
+function Navbar() {
+  const { theme, setTheme } = useContext(ThemeContext);
+  return (
+    <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+      Toggle Theme
+    </button>
+  );
+}
+```
+
+### When to Use Context vs Plain Props
+
+Context is not meant to replace props everywhere. For state used only by a component and maybe one direct child, plain props are simpler and easier to trace. Context is best reserved for state that many unrelated components across the tree need, like theme, authentication, or current user, where prop drilling would otherwise be unavoidable.
