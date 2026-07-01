@@ -1,5 +1,6 @@
-# User Directory App
+🔗 **Live Demo:** [https://aurak-internship-web-development.vercel.app](https://aurak-internship-web-development.vercel.app)
 
+# User Directory App
 A full-stack-style React application built during a web development internship at Sohail Smart Solutions. It fetches live user data from a public API, lets you search and add users, and includes a detail page for each one.
 
 ## Features
