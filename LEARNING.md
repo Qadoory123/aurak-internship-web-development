@@ -465,3 +465,15 @@ function Navbar() {
 ### When to Use Context vs Plain Props
 
 Context is not meant to replace props everywhere. For state used only by a component and maybe one direct child, plain props are simpler and easier to trace. Context is best reserved for state that many unrelated components across the tree need, like theme, authentication, or current user, where prop drilling would otherwise be unavoidable.
+
+## Deployment: Taking the App Live with Vercel
+
+Up until now, everything I built only existed on localhost, running inside CodeSandbox's dev server. Development mode is meant for building: it includes hot-reloading, unminified code, and detailed error overlays, but none of that is meant for the public. Production is different. It is a live, permanent version of the app that anyone can open through a real URL, running optimized code with no dev tools attached.
+
+To get from source code to production, React apps go through a build step. Running `npm run build` uses Vite to bundle all the JavaScript into a small number of optimized files, minify the code so it loads faster, and output everything into a `dist/` folder. This is the version that actually gets deployed, since raw JSX and unbundled files are not something a browser or web server can run directly.
+
+Vercel connects to a GitHub repository and handles this automatically. Once linked, every push to the main branch triggers Vercel to pull the latest code, run the build command, and deploy the new output to a live production URL. This is called continuous deployment, and it means updates go live without any manual uploading.
+
+An environment refers to the context the app is running in, such as development or production, and each can behave differently. The production URL is the permanent public link representing the live main version of the app, separate from any preview links Vercel generates for other branches.
+
+One important principle for future backend work is that API keys and secrets should never be hardcoded into source code, since a public GitHub repo would expose them to anyone. They belong in environment variables instead, kept out of the codebase entirely.
