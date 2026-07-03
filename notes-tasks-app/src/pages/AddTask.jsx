@@ -5,7 +5,6 @@ import { useTasks } from "../context/TaskContext";
 function AddTask() {
   const { addTask, theme } = useTasks();
   const navigate = useNavigate();
-
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -13,23 +12,19 @@ function AddTask() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
     const newErrors = {};
     if (!title.trim()) {
       newErrors.title = "Title is required";
     }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
     addTask({
       title: title.trim(),
       category: category.trim(),
       description: description.trim(),
     });
-
     setTitle("");
     setCategory("");
     setDescription("");
@@ -46,11 +41,13 @@ function AddTask() {
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              if (errors.title) setErrors({ ...errors, title: null });
+            }}
           />
           {errors.title && <span className="error">{errors.title}</span>}
         </div>
-
         <div className="form-group">
           <label>Category (optional)</label>
           <input
@@ -67,7 +64,6 @@ function AddTask() {
             ))}
           </div>
         </div>
-
         <div className="form-group">
           <label>Description (optional)</label>
           <textarea
@@ -75,7 +71,6 @@ function AddTask() {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-
         <button type="submit" className="submit-btn">
           Add Task
         </button>
