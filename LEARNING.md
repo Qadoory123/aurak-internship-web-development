@@ -477,3 +477,19 @@ Vercel connects to a GitHub repository and handles this automatically. Once link
 An environment refers to the context the app is running in, such as development or production, and each can behave differently. The production URL is the permanent public link representing the live main version of the app, separate from any preview links Vercel generates for other branches.
 
 One important principle for future backend work is that API keys and secrets should never be hardcoded into source code, since a public GitHub repo would expose them to anyone. They belong in environment variables instead, kept out of the codebase entirely.
+
+## Week 6 - Backend Foundations: Node.js, Express & HTTP
+
+This task introduced me to the backend side of web development after five weeks of working only on the frontend. Until now, every project I built ran entirely in the browser and either used hardcoded data, localStorage, or a public API like JSONPlaceholder. Today I learned what happens on the other side of that API, the server that actually stores and returns the data.
+
+A backend is code that runs on a server rather than in the user's browser. The frontend is the client, it requests data and displays it. The backend receives those requests, runs logic, and sends data back. This client/server relationship is the same one I have been interacting with every time I called fetch() against JSONPlaceholder, except now I am the one writing the server side of that exchange.
+
+Node.js is what makes this possible. It is a runtime that lets JavaScript run outside the browser, on a server or directly in a terminal, using the same language I already know from React.
+
+Express is a framework built on top of Node.js that simplifies building a server. Instead of manually parsing raw HTTP connections, Express provides simple functions like app.get() and app.post() to define what the server should do when a specific request comes in.
+
+I also learned the four core HTTP methods. GET retrieves data, POST creates new data, PUT updates existing data, and DELETE removes it. A route, or endpoint, is a specific URL path combined with one of these methods, for example GET /api/tasks. When a matching request arrives, Express runs the function attached to that route.
+
+Every route handler function receives two objects, req and res. req represents the incoming request and can contain information like URL parameters or submitted data. res is used to send the response back to whoever made the request, most often using res.json() to return data in JSON format.
+
+This task laid the foundation for everything else this week, since building an API that can create, update, and delete data depends entirely on understanding this request and response cycle.
