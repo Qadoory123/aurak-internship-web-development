@@ -493,3 +493,15 @@ I also learned the four core HTTP methods. GET retrieves data, POST creates new 
 Every route handler function receives two objects, req and res. req represents the incoming request and can contain information like URL parameters or submitted data. res is used to send the response back to whoever made the request, most often using res.json() to return data in JSON format.
 
 This task laid the foundation for everything else this week, since building an API that can create, update, and delete data depends entirely on understanding this request and response cycle.
+
+## Building a REST API: Full CRUD with Express
+
+Today I learned about REST and building a complete CRUD API. REST stands for Representational State Transfer, and it is a convention for designing APIs around resources rather than actions. Instead of having a separate URL for every possible operation, a RESTful API uses one URL per resource, like /api/tasks, and relies on the HTTP method to say what should happen to that resource. This keeps the API predictable, since the same URL pattern always refers to the same resource no matter what method is used.
+
+This connects directly to CRUD, which stands for Create, Read, Update, and Delete, the four basic operations almost every application performs on data. Each one maps to a specific HTTP method: Create maps to POST, Read maps to GET, Update maps to PUT or PATCH, and Delete maps to DELETE. Yesterday's server only had GET endpoints, so it could hand out data but not change it. Adding the other three methods is what turns a read-only server into a real backend.
+
+To read data sent in a POST or PUT request, I needed middleware, specifically express.json(). Middleware is a function that runs before the actual route handler, and express.json() parses the raw JSON text sent in a request body and attaches it to req.body, so the route handler can use it directly instead of dealing with raw text.
+
+I also used route parameters on the backend for the first time, defining routes like /api/tasks/:id. This is the server-side equivalent of useParams from React Router. Express captures whatever value appears in place of :id and makes it available as req.params.id, which I used to find the matching task in the array.
+
+Finally, I learned to return proper HTTP status codes instead of always defaulting to 200: 201 for a successful POST, 400 when required fields are missing, and 404 when a requested id does not exist.
