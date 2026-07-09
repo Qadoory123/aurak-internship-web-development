@@ -100,15 +100,12 @@ document.querySelector("h1").textContent = "Updated Title";
 ## Working With APIs
 
 ### What is an API?
-
 An API (Application Programming Interface) is a way for two systems to communicate. In web development, it usually means a server that provides data which your browser or application can request. Instead of building everything yourself, you can use an API to get real information like weather, users, or news.
 
 ### Request and Response
-
 When a browser wants data, it sends a **request** to a server. The request includes the URL of the API and the type of action (usually GET to retrieve data). The server receives the request, processes it, and sends back a **response**. The response contains a status code (like 200 for success or 404 for not found) and the actual data.
 
 ### JSON Format
-
 APIs send data in **JSON** (JavaScript Object Notation) format. JSON is a structured text format that looks like a JavaScript object. It is easy to read and easy for JavaScript to work with.
 
 Example:
@@ -121,17 +118,14 @@ Example:
 ```
 
 ### fetch(), Promises, and async/await
-
-`fetch()` is the built-in browser function used to send requests to an API. It returns a **Promise**, which represents a value that will be available in the future — either successfully (resolved) or with an error (rejected).
+`fetch()` is the built-in browser function used to send requests to an API. It returns a **Promise**, which represents a value that will be available in the future, either successfully (resolved) or with an error (rejected).
 
 `async/await` is a cleaner way to work with Promises. Marking a function as `async` allows you to use `await` inside it, which pauses execution until the Promise resolves.
 
 ### Converting Responses with .json()
-
 The response returned by `fetch()` is a raw HTTP response, not usable data yet. Calling `.json()` on it reads the response body and converts the JSON text into a real JavaScript object that can be accessed and rendered.
 
 ### Error Handling with try/catch
-
 Network requests can fail. Wrapping the fetch logic inside a `try/catch` block ensures that if anything goes wrong, a bad URL, no internet connection, or a server error, the error is caught and handled gracefully instead of breaking the application.
 
 Example:
@@ -148,7 +142,6 @@ async function loadUsers() {
 ```
 
 ### How It All Connects
-
 When `fetch()` is called, the browser sends a request to the API URL. The server responds with JSON data. `.json()` converts that into a JavaScript object. The data is then available inside the function and can be used to create elements and update the page dynamically without any page refresh.
 
 ## Component-Based Thinking
@@ -305,24 +298,27 @@ my-first-react-app/
 
 ## React State Fundamentals
 
+### State vs Props
 State is data that a component manages internally and that can change over time. Unlike props, which are passed into a component from its parent and cannot be changed by the component itself, state belongs to the component and is fully controlled by it. When state changes, React automatically re-renders the component to reflect the new value, so the UI always stays in sync with the data.
 
-The useState hook is how state is declared in a function component. Calling useState(initialValue) returns an array with two items: the current value and a function to update it. The common pattern is array destructuring, for example const [searchTerm, setSearchTerm] = useState(""). Calling the setter function (setSearchTerm) updates the state and tells React to re-render the component with the new value.
+### The useState Hook
+The `useState` hook is how state is declared in a function component. Calling `useState(initialValue)` returns an array with two items: the current value and a function to update it. The common pattern is array destructuring, for example `const [searchTerm, setSearchTerm] = useState("")`. Calling the setter function (`setSearchTerm`) updates the state and tells React to re-render the component with the new value.
 
-React re-renders automatically because state updates trigger React to re-run the component function and compare the new output to what is currently on screen, updating only what changed. This is different from Vanilla JavaScript, where I had to manually select elements with querySelector and update them with innerHTML or class toggling every time something changed.
+### Why React Re-Renders Automatically
+React re-renders automatically because state updates trigger React to re-run the component function and compare the new output to what is currently on screen, updating only what changed. This is different from vanilla JavaScript, where I had to manually select elements with `querySelector` and update them with `innerHTML` or class toggling every time something changed.
 
-Events in React are handled using props like onClick and onChange, which take a function instead of a string like in HTML. For example, onChange={(e) => setSearchTerm(e.target.value)} runs every time the input value changes and updates state with the new text.
+### Handling Events in React
+Events in React are handled using props like `onClick` and `onChange`, which take a function instead of a string like in HTML. For example, `onChange={(e) => setSearchTerm(e.target.value)}` runs every time the input value changes and updates state with the new text.
 
-The core difference: props are data passed in from outside and are read-only from the component's perspective, while state is data a component owns and can update itself, which is what makes interactivity possible.
+### The Core Difference
+Props are data passed in from outside and are read-only from the component's perspective, while state is data a component owns and can update itself, which is what makes interactivity possible.
 
 ## useEffect & Live Data
 
 ### What is a Side Effect in React?
-
-A side effect is anything a component does that reaches outside its own render cycle — fetching data from an API, setting a page title, starting a timer, or writing to local storage. These are called side effects because they affect something outside the component itself, not just what React renders on screen. Fetching data is the most common side effect in real applications, because the component needs to go out to a server, wait for a response, and then update its own state with the result.
+A side effect is anything a component does that reaches outside its own render cycle, fetching data from an API, setting a page title, starting a timer, or writing to local storage. These are called side effects because they affect something outside the component itself, not just what React renders on screen. Fetching data is the most common side effect in real applications, because the component needs to go out to a server, wait for a response, and then update its own state with the result.
 
 ### The useEffect Hook
-
 `useEffect` is the React hook designed for running side effects. It takes two arguments: an effect function and a dependency array.
 
 ```jsx
@@ -331,14 +327,12 @@ useEffect(() => {
 }, []);
 ```
 
-The dependency array controls when the effect re-runs. An empty array `[]` means the effect runs once, when the component first mounts (appears on screen), and never again after that. This is the correct choice for a one-time data fetch on page load. If the array is left out entirely, the effect runs after every single render, which causes infinite re-renders when fetching data — because fetch updates state, state causes a re-render, and the re-render triggers another fetch.
+The dependency array controls when the effect re-runs. An empty array `[]` means the effect runs once, when the component first mounts (appears on screen), and never again after that. This is the correct choice for a one-time data fetch on page load. If the array is left out entirely, the effect runs after every single render, which causes infinite re-renders when fetching data, because fetch updates state, state causes a re-render, and the re-render triggers another fetch.
 
 ### Why fetch Must Not Be Called in the Component Body
-
-If `fetch` is called directly in the component body (outside `useEffect`), it runs every time the component renders. When the data arrives and `setState` is called, that triggers a re-render, which calls `fetch` again, which triggers another render — an infinite loop. Wrapping the fetch inside `useEffect` with `[]` breaks that cycle by ensuring the fetch runs only once.
+If `fetch` is called directly in the component body (outside `useEffect`), it runs every time the component renders. When the data arrives and `setState` is called, that triggers a re-render, which calls `fetch` again, which triggers another render, an infinite loop. Wrapping the fetch inside `useEffect` with `[]` breaks that cycle by ensuring the fetch runs only once.
 
 ### The Three States of a Data Fetch
-
 Every fetch request has three possible outcomes, and a real application must handle all three:
 
 - **Loading** — the request has been sent but no response has arrived yet. The UI should show a loading indicator so the user knows something is happening.
@@ -368,32 +362,27 @@ useEffect(() => {
   fetchUsers();
 }, []);
 ```
+
 ## Controlled Forms & Input Validation
 
-**What a controlled component is**
-
+### What a Controlled Component Is
 A controlled component is a form input where React state is the single source of truth for the input's value. Instead of letting the browser manage what's typed, you bind the input's `value` to a state variable and update that variable on every keystroke through `onChange`. This means the input always reflects exactly what's in state, and state always reflects exactly what's in the input. The two stay in sync at all times.
 
-**Why controlled inputs are preferred over reading the DOM directly**
-
+### Why Controlled Inputs Are Preferred Over Reading the DOM Directly
 In vanilla JavaScript, reading a form field means querying the DOM at the moment of submission to find out what the user typed. With controlled inputs, you always have the current value in state without touching the DOM at all. This makes validation easier because you can check state at any point, not just on submit. It also makes clearing the form straightforward: reset the state variables and the inputs clear automatically. The component becomes predictable because the UI is always a direct reflection of state.
 
-**Handling form submission in React**
-
+### Handling Form Submission in React
 Form submission is handled through the `onSubmit` prop on the `<form>` element. The handler receives an event object, and calling `e.preventDefault()` is the first thing you do inside it. Without that call, the browser's default behavior fires, which reloads the page and wipes the React state. After preventing the default, the handler runs the validation logic and processes the form data.
 
-**Basic validation**
-
+### Basic Validation
 Validation checks run inside the `onSubmit` handler before anything is added to the list. Required field checks confirm that no state variable is an empty string after trimming whitespace. A basic email format check uses a regular expression to confirm the value contains an `@` and a domain. If any check fails, an error message is stored in a separate state variable and displayed inline next to the relevant field. If all checks pass, the new entry is added to the list and the form fields are cleared by resetting each state variable to an empty string.
 
 ## React Router & Client-Side Routing
 
 ### What Client-Side Routing Is
-
 In a traditional website, clicking a link sends a request to the server and the browser loads a completely new HTML page. In a Single-Page Application (SPA), the browser loads one HTML file once and JavaScript handles everything after that. Client-side routing means React intercepts URL changes, matches the new path to a component, and swaps what is displayed on screen, all without a full page reload. The server is never contacted again just to navigate between views. This makes navigation feel instant and preserves all React state across page changes.
 
 ### React Router Basics
-
 React Router is the standard library for adding routing to React apps. The four core pieces are:
 
 - `BrowserRouter` wraps the entire app and gives React Router access to the browser's URL history API.
@@ -402,11 +391,9 @@ React Router is the standard library for adding routing to React apps. The four 
 - `Link` renders a navigation element that updates the URL without reloading the page.
 
 ### Route Parameters
-
 A route like `/users/:id` uses `:id` as a dynamic segment. The colon tells React Router that this part of the URL is a variable, not a fixed string. When a user visits `/users/4`, React Router captures `4` and makes it available inside the component through the `useParams` hook. Calling `useParams()` returns an object like `{ id: "4" }`, which can then be used to find and display the matching record.
 
 ### Link vs a Tag
-
 A standard HTML `<a href="/about">` tag causes a full browser navigation. The current page is unloaded, a new request goes to the server, and the entire React app restarts from scratch, wiping all state. A React Router `<Link to="/about">` intercepts the click, updates the browser's URL using the History API, and tells React Router to re-render the correct component, with no server request and no page reload. Using `<a>` tags for internal navigation in a React app defeats the purpose of client-side routing entirely.
 
 ## Integration & Portfolio Polish
@@ -425,16 +412,13 @@ A deployed link lets anyone open the app in seconds without cloning, installing 
 
 ## Context API & Global State
 
-### What is Prop Drilling
-
+### What Is Prop Drilling
 Prop drilling happens when data needs to pass from a top-level component down to a deeply nested one, forcing every component in between to accept and forward that prop, even if it never uses it itself. As an app grows, this becomes painful: adding a new shared value means touching every file in the chain, and it gets harder to track where a prop actually came from versus where it's just passing through.
 
 ### What the Context API Solves
-
 The Context API is React's built-in solution to prop drilling. It lets you define a piece of state once and make it available to any component in the tree, no matter how deeply nested, without manually passing it through props at every level.
 
 ### The Three Pieces
-
 - `createContext()` creates the context object itself, an empty container for the shared value.
 - A **Provider** component wraps the part of the app that needs access (usually the whole app, in `App.jsx`), holds the actual state with `useState`, and passes it down through the `value` prop.
 - `useContext(MyContext)` is called inside any component that needs to read or update that state, returning the current value directly regardless of how deep that component sits in the tree.
@@ -463,45 +447,58 @@ function Navbar() {
 ```
 
 ### When to Use Context vs Plain Props
-
 Context is not meant to replace props everywhere. For state used only by a component and maybe one direct child, plain props are simpler and easier to trace. Context is best reserved for state that many unrelated components across the tree need, like theme, authentication, or current user, where prop drilling would otherwise be unavoidable.
 
 ## Deployment: Taking the App Live with Vercel
 
+### Development vs Production
 Up until now, everything I built only existed on localhost, running inside CodeSandbox's dev server. Development mode is meant for building: it includes hot-reloading, unminified code, and detailed error overlays, but none of that is meant for the public. Production is different. It is a live, permanent version of the app that anyone can open through a real URL, running optimized code with no dev tools attached.
 
+### The Build Step
 To get from source code to production, React apps go through a build step. Running `npm run build` uses Vite to bundle all the JavaScript into a small number of optimized files, minify the code so it loads faster, and output everything into a `dist/` folder. This is the version that actually gets deployed, since raw JSX and unbundled files are not something a browser or web server can run directly.
 
+### Continuous Deployment with Vercel
 Vercel connects to a GitHub repository and handles this automatically. Once linked, every push to the main branch triggers Vercel to pull the latest code, run the build command, and deploy the new output to a live production URL. This is called continuous deployment, and it means updates go live without any manual uploading.
 
+### Environments and Production URLs
 An environment refers to the context the app is running in, such as development or production, and each can behave differently. The production URL is the permanent public link representing the live main version of the app, separate from any preview links Vercel generates for other branches.
 
+### A Note on Secrets
 One important principle for future backend work is that API keys and secrets should never be hardcoded into source code, since a public GitHub repo would expose them to anyone. They belong in environment variables instead, kept out of the codebase entirely.
 
-## Week 6 - Backend Foundations: Node.js, Express & HTTP
+## Backend Foundations: Node.js, Express & HTTP
 
+### The Client/Server Model
 This task introduced me to the backend side of web development after five weeks of working only on the frontend. Until now, every project I built ran entirely in the browser and either used hardcoded data, localStorage, or a public API like JSONPlaceholder. Today I learned what happens on the other side of that API, the server that actually stores and returns the data.
 
-A backend is code that runs on a server rather than in the user's browser. The frontend is the client, it requests data and displays it. The backend receives those requests, runs logic, and sends data back. This client/server relationship is the same one I have been interacting with every time I called fetch() against JSONPlaceholder, except now I am the one writing the server side of that exchange.
+A backend is code that runs on a server rather than in the user's browser. The frontend is the client, it requests data and displays it. The backend receives those requests, runs logic, and sends data back. This client/server relationship is the same one I have been interacting with every time I called `fetch()` against JSONPlaceholder, except now I am the one writing the server side of that exchange.
 
+### Node.js and Express
 Node.js is what makes this possible. It is a runtime that lets JavaScript run outside the browser, on a server or directly in a terminal, using the same language I already know from React.
 
-Express is a framework built on top of Node.js that simplifies building a server. Instead of manually parsing raw HTTP connections, Express provides simple functions like app.get() and app.post() to define what the server should do when a specific request comes in.
+Express is a framework built on top of Node.js that simplifies building a server. Instead of manually parsing raw HTTP connections, Express provides simple functions like `app.get()` and `app.post()` to define what the server should do when a specific request comes in.
 
-I also learned the four core HTTP methods. GET retrieves data, POST creates new data, PUT updates existing data, and DELETE removes it. A route, or endpoint, is a specific URL path combined with one of these methods, for example GET /api/tasks. When a matching request arrives, Express runs the function attached to that route.
+### HTTP Methods and Routes
+I also learned the four core HTTP methods. GET retrieves data, POST creates new data, PUT updates existing data, and DELETE removes it. A route, or endpoint, is a specific URL path combined with one of these methods, for example `GET /api/tasks`. When a matching request arrives, Express runs the function attached to that route.
 
-Every route handler function receives two objects, req and res. req represents the incoming request and can contain information like URL parameters or submitted data. res is used to send the response back to whoever made the request, most often using res.json() to return data in JSON format.
+### req and res
+Every route handler function receives two objects, `req` and `res`. `req` represents the incoming request and can contain information like URL parameters or submitted data. `res` is used to send the response back to whoever made the request, most often using `res.json()` to return data in JSON format.
 
 This task laid the foundation for everything else this week, since building an API that can create, update, and delete data depends entirely on understanding this request and response cycle.
 
 ## Building a REST API: Full CRUD with Express
 
-Today I learned about REST and building a complete CRUD API. REST stands for Representational State Transfer, and it is a convention for designing APIs around resources rather than actions. Instead of having a separate URL for every possible operation, a RESTful API uses one URL per resource, like /api/tasks, and relies on the HTTP method to say what should happen to that resource. This keeps the API predictable, since the same URL pattern always refers to the same resource no matter what method is used.
+### REST and RESTful APIs
+Today I learned about REST and building a complete CRUD API. REST stands for Representational State Transfer, and it is a convention for designing APIs around resources rather than actions. Instead of having a separate URL for every possible operation, a RESTful API uses one URL per resource, like `/api/tasks`, and relies on the HTTP method to say what should happen to that resource. This keeps the API predictable, since the same URL pattern always refers to the same resource no matter what method is used.
 
+### CRUD Mapped to HTTP Methods
 This connects directly to CRUD, which stands for Create, Read, Update, and Delete, the four basic operations almost every application performs on data. Each one maps to a specific HTTP method: Create maps to POST, Read maps to GET, Update maps to PUT or PATCH, and Delete maps to DELETE. Yesterday's server only had GET endpoints, so it could hand out data but not change it. Adding the other three methods is what turns a read-only server into a real backend.
 
-To read data sent in a POST or PUT request, I needed middleware, specifically express.json(). Middleware is a function that runs before the actual route handler, and express.json() parses the raw JSON text sent in a request body and attaches it to req.body, so the route handler can use it directly instead of dealing with raw text.
+### Middleware and express.json()
+To read data sent in a POST or PUT request, I needed middleware, specifically `express.json()`. Middleware is a function that runs before the actual route handler, and `express.json()` parses the raw JSON text sent in a request body and attaches it to `req.body`, so the route handler can use it directly instead of dealing with raw text.
 
-I also used route parameters on the backend for the first time, defining routes like /api/tasks/:id. This is the server-side equivalent of useParams from React Router. Express captures whatever value appears in place of :id and makes it available as req.params.id, which I used to find the matching task in the array.
+### Route Parameters on the Backend
+I also used route parameters on the backend for the first time, defining routes like `/api/tasks/:id`. This is the server-side equivalent of `useParams` from React Router. Express captures whatever value appears in place of `:id` and makes it available as `req.params.id`, which I used to find the matching task in the array.
 
+### HTTP Status Codes
 Finally, I learned to return proper HTTP status codes instead of always defaulting to 200: 201 for a successful POST, 400 when required fields are missing, and 404 when a requested id does not exist.
