@@ -9,9 +9,11 @@ function AddTask() {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
     const newErrors = {};
     if (!title.trim()) {
       newErrors.title = "Title is required";
@@ -20,16 +22,26 @@ function AddTask() {
       setErrors(newErrors);
       return;
     }
-    addTask({
-      title: title.trim(),
-      category: category.trim(),
-      description: description.trim(),
-    });
-    setTitle("");
-    setCategory("");
-    setDescription("");
-    setErrors({});
-    navigate("/");
+
+    setSubmitting(true);
+
+    try {
+      await addTask({
+        title: title.trim(),
+        category: category.trim(),
+        description: description.trim(),
+      });
+
+      setTitle("");
+      setCategory("");
+      setDescription("");
+      setErrors({});
+      navigate("/");
+    } catch (err) {
+      setErrors({ submit: "Could not add task. Is the server running?" });
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -71,8 +83,9 @@ function AddTask() {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        <button type="submit" className="submit-btn">
-          Add Task
+        {errors.submit && <span className="error">{errors.submit}</span>}
+        <button type="submit" className="submit-btn" disabled={submitting}>
+          {submitting ? "Adding..." : "Add Task"}
         </button>
       </form>
     </div>
