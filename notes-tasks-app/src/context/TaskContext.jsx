@@ -2,26 +2,61 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const TaskContext = createContext();
 
-export function TaskProvider({ children }) {
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : [];
-  });
+const API_URL = "https://59sl4t-5000.csb.app/api/tasks";
 
+export function TaskProvider({ children }) {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    async function fetchTasks() {
+      try {
+        setLoading(true);
+        setError(null);
 
-  function addTask(task) {
-    const newTask = {
-      id: Date.now(),
-      title: task.title,
-      category: task.category || "",
-      description: task.description || "",
-    };
-    setTasks((prev) => [...prev, newTask]);
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch tasks from server");
+        }
+
+        const data = await response.json();
+        setTasks(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTasks();
+  }, []);
+
+  async function addTask(task) {
+    try {
+      setError(null);
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: task.title,
+          category: task.category || "",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create task");
+      }
+
+      const newTask = await response.json();
+      setTasks((prev) => [...prev, newTask]);
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
   }
 
   function deleteTask(id) {
@@ -34,7 +69,7 @@ export function TaskProvider({ children }) {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, addTask, deleteTask, theme, toggleTheme }}
+      value={{ tasks, loading, error, addTask, deleteTask, theme, toggleTheme }}
     >
       {children}
     </TaskContext.Provider>
