@@ -1,15 +1,17 @@
 {
-  "name": "nodejs-sandbox",
+  "name": "notes-tasks-backend",
   "version": "1.0.0",
-  "description": "This is a Node.js project.",
-  "main": "index.js",
+  "description": "Express REST API for the Notes & Tasks application.",
+  "main": "server.js",
   "scripts": {
-    "start": "node --watch index.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
   "keywords": [],
-  "author": "Ives van Hoorne",
+  "author": "Abdalqader Ahmed",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.6",
     "express": "^5.2.1"
   }
 }
