@@ -59,8 +59,51 @@ export function TaskProvider({ children }) {
     }
   }
 
-  function deleteTask(id) {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+  async function updateTask(id, updates) {
+    try {
+      setError(null);
+
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: updates.title,
+          category: updates.category,
+          description: updates.description,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      }
+
+      const updatedTask = await response.json();
+      setTasks((prev) =>
+        prev.map((task) => (task.id === id ? updatedTask : task))
+      );
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
+  }
+
+  async function deleteTask(id) {
+    try {
+      setError(null);
+
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+
+      setTasks((prev) => prev.filter((task) => task.id !== id));
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
   }
 
   function toggleTheme() {
@@ -69,7 +112,16 @@ export function TaskProvider({ children }) {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, loading, error, addTask, deleteTask, theme, toggleTheme }}
+      value={{
+        tasks,
+        loading,
+        error,
+        addTask,
+        updateTask,
+        deleteTask,
+        theme,
+        toggleTheme,
+      }}
     >
       {children}
     </TaskContext.Provider>
