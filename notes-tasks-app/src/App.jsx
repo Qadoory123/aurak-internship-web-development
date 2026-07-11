@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import TaskDetail from "./pages/TaskDetail";
 import AddTask from "./pages/AddTask";
+import EditTask from "./pages/EditTask";
 import "./App.css";
 
 function AppShell() {
@@ -15,6 +16,7 @@ function AppShell() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tasks/:id" element={<TaskDetail />} />
+          <Route path="/tasks/:id/edit" element={<EditTask />} />
           <Route path="/add" element={<AddTask />} />
         </Routes>
       </div>
