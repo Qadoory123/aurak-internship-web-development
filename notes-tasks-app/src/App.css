@@ -273,6 +273,39 @@ h1 {
   background: #4f46e5;
 }
 
+/* Task detail actions (Edit + Delete buttons) */
+.task-detail-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.edit-btn {
+  display: inline-block;
+  background: transparent;
+  color: #6366f1;
+  border: 1px solid #6366f1;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.delete-btn:disabled,
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-message.error {
+  color: #ef4444;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .navbar {
