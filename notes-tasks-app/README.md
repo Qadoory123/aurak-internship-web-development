@@ -50,12 +50,6 @@ This app is powered by a custom REST API built with Node.js and Express, located
 **Add Task Page**
 ![Add Task](assets/screenshots/add-task.png)
 
-**Editing a Task**
-![Edit Task](assets/screenshots/edit-task.png)
-
-**Deleting a Task**
-![Delete Task](assets/screenshots/delete-task.png)
-
 ## Project Structure
 
 - `notes-tasks-app/`
