@@ -528,3 +528,15 @@ Finally, I wrote complete READMEs for both the frontend and backend repositories
 ### Key Takeaway
 
 Today's task had no new concept to learn, and that was the point. Completing a feature, testing it, cleaning up after myself, and documenting it accurately is a different kind of work than building something for the first time, and it is just as real a part of professional development. The bugs I caught today, a leftover CSS property, an untouched template file, were not new mistakes. They were old habits from earlier weeks resurfacing, which is exactly why a dedicated polish and documentation pass matters even when the underlying features already work.
+
+### Complete CRUD API for Capstone Resource
+
+Today's task extended TaskFlow's backend from read-only to a full CRUD API, adding create, update, and delete on top of yesterday's GET endpoints.
+
+CRUD maps directly onto HTTP methods: POST creates, GET reads, PUT updates, and DELETE removes. For tasks, my main resource, I implemented all four. POST /api/tasks validates that both title and projectId are present, returning 400 if either is missing, and 201 with the newly created task on success, using a simple max-id-plus-one approach to generate new ids since there's no database yet. PUT /api/tasks/:id updates only the fields actually provided in the request body, leaving the rest untouched, and returns 404 if the id doesn't exist. DELETE /api/tasks/:id removes the matching task using splice() and returns the deleted item, also with 404 handling for a missing id.
+
+For projects, my secondary resource, I added POST /api/projects with the same validation pattern, requiring a name and returning 400 if it's missing, 201 with the new project on success.
+
+The validation and status code logic followed the same shape across every route: check the input first, return an early 400 if something required is missing, only touch the in-memory array once the input is valid, and return the right status code, 201 for created, 200 for a normal success, 404 when the target id can't be found. Seeing that pattern repeat consistently across both resources confirmed it's a real convention and not something specific to a single route.
+
+Testing every case in Postman, valid POST, invalid POST, PUT on a real id, PUT on a missing id, and DELETE on both a real and missing id, confirmed all the status codes behave exactly as expected before touching the frontend tomorrow.
