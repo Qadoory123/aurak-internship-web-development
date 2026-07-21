@@ -2,9 +2,21 @@ const express = require("express");
 const router = express.Router();
 
 let projects = [
-  { id: 1, name: "Website Redesign", description: "Revamp the company marketing site" },
-  { id: 2, name: "Mobile App Launch", description: "Ship v1 of the iOS/Android app" },
-  { id: 3, name: "Internal Tools", description: "Build internal dashboards for the ops team" },
+  {
+    id: 1,
+    name: "Website Redesign",
+    description: "Revamp the company marketing site",
+  },
+  {
+    id: 2,
+    name: "Mobile App Launch",
+    description: "Ship v1 of the iOS/Android app",
+  },
+  {
+    id: 3,
+    name: "Internal Tools",
+    description: "Build internal dashboards for the ops team",
+  },
 ];
 
 router.get("/", (req, res) => {
@@ -32,6 +44,22 @@ router.post("/", (req, res) => {
 
   projects.push(newProject);
   res.status(201).json(newProject);
+});
+
+router.delete("/:id", (req, res) => {
+  const index = projects.findIndex((p) => p.id === Number(req.params.id));
+  if (index === -1) return res.status(404).json({ error: "Project not found" });
+
+  const [deletedProject] = projects.splice(index, 1);
+
+  const { tasks } = require("./tasks");
+  for (let i = tasks.length - 1; i >= 0; i--) {
+    if (tasks[i].projectId === deletedProject.id) {
+      tasks.splice(i, 1);
+    }
+  }
+
+  res.json(deletedProject);
 });
 
 module.exports = router;
