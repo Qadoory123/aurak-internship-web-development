@@ -1,30 +1,34 @@
 import { Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import DashboardStats from "../components/DashboardStats";
+import ProjectCard from "../components/ProjectCard";
+import EmptyState from "../components/EmptyState";
 
-export default function ProjectCard({ project }) {
-  const { tasks, deleteProject } = useApp();
-  const projectTasks = tasks.filter((t) => t.projectId === project.id);
-  const doneCount = projectTasks.filter((t) => t.status === "done").length;
+export default function Dashboard() {
+  const { projects, tasks, loading, error } = useApp();
 
-  function handleDelete(e) {
-    e.preventDefault();
-    if (window.confirm(`Delete "${project.name}" and all its tasks?`)) {
-      deleteProject(project.id);
-    }
-  }
+  if (loading) return <p className="status-message">Loading dashboard...</p>;
+  if (error) return <p className="status-message error">Error: {error}</p>;
 
   return (
-    <div className="project-card">
-      <Link to={`/projects/${project.id}`}>
-        <h3>{project.name}</h3>
-        <p>{project.description}</p>
-        <span className="task-count">
-          {doneCount}/{projectTasks.length} tasks done
-        </span>
-      </Link>
-      <button onClick={handleDelete} className="delete-btn">
-        Delete
-      </button>
+    <div className="page">
+      <div className="page-header">
+        <h1>Dashboard</h1>
+        <Link to="/tasks/new" className="btn-primary">
+          + Add Task
+        </Link>
+      </div>
+      <DashboardStats tasks={tasks} />
+      <h2>Your Projects</h2>
+      {projects.length === 0 ? (
+        <EmptyState message="No projects yet. Create one to get started." />
+      ) : (
+        <div className="project-grid">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
