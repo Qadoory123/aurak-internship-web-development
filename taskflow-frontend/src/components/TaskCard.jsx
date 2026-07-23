@@ -8,10 +8,17 @@ import { useApp } from "../context/AppContext";
 export default function TaskCard({ task }) {
   const { deleteTask } = useApp();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
-  function handleDelete() {
-    deleteTask(task.id);
-    setConfirmOpen(false);
+  async function handleDelete() {
+    setDeleteError("");
+    try {
+      await deleteTask(task.id);
+      setConfirmOpen(false);
+    } catch (err) {
+      setDeleteError("Failed to delete task. Please try again.");
+      setConfirmOpen(false);
+    }
   }
 
   return (
@@ -38,6 +45,9 @@ export default function TaskCard({ task }) {
       <p className="card-meta" style={{ textTransform: "capitalize" }}>
         {task.priority} priority
       </p>
+
+      {deleteError && <p className="form-error">{deleteError}</p>}
+
       <div className="card-actions">
         <Link to={`/tasks/${task.id}/edit`} className="btn btn-secondary">
           Edit
