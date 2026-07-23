@@ -46,6 +46,23 @@ router.post("/", (req, res) => {
   res.status(201).json(newProject);
 });
 
+router.put("/:id", (req, res) => {
+  const project = projects.find((p) => p.id === Number(req.params.id));
+  if (!project) return res.status(404).json({ error: "Project not found" });
+
+  const { name, description } = req.body;
+
+  if (name !== undefined) {
+    if (typeof name !== "string" || name.trim() === "") {
+      return res.status(400).json({ error: "Name cannot be empty" });
+    }
+    project.name = name.trim();
+  }
+  if (description !== undefined) project.description = description;
+
+  res.json(project);
+});
+
 router.delete("/:id", (req, res) => {
   const index = projects.findIndex((p) => p.id === Number(req.params.id));
   if (index === -1) return res.status(404).json({ error: "Project not found" });
