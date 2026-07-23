@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider, useApp } from "./context/AppContext";
 import Navbar from "./components/Navbar";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Dashboard from "./pages/Dashboard";
 import ProjectList from "./pages/ProjectList";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -15,15 +16,17 @@ function AppShell() {
   return (
     <div className={`app-wrapper ${theme === "dark" ? "theme-dark" : ""}`}>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/projects" element={<ProjectList />} />
-        <Route path="/projects/:id" element={<ProjectDetail />} />
-        <Route path="/tasks/new" element={<AddEditTask />} />
-        <Route path="/tasks/:id" element={<TaskDetail />} />
-        <Route path="/tasks/:id/edit" element={<AddEditTask />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/projects" element={<ProjectList />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/tasks/new" element={<AddEditTask />} />
+          <Route path="/tasks/:id" element={<TaskDetail />} />
+          <Route path="/tasks/:id/edit" element={<AddEditTask />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </ErrorBoundary>
     </div>
   );
 }
