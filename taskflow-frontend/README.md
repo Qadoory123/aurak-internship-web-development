@@ -57,3 +57,10 @@ Full details in the backend README. This app consumes:
 ## Deployment Notes
 
 This app is a single-page application using client-side routing (React Router). A `vercel.json` rewrite rule is included so that refreshing or directly visiting a nested route (e.g. `/tasks/5`) is correctly served instead of returning a 404.
+
+
+## Next Steps
+
+- **Cloud backend deployment:** move `taskflow-backend` off a local/CodeSandbox URL onto a permanent host (Render or Railway), then update `VITE_API_URL` in Vercel's environment variables to point at it — no frontend code changes required.
+- **Database:** replace the backend's in-memory arrays with a real database (MongoDB or a SQL database like PostgreSQL), so projects and tasks persist across server restarts instead of resetting.
+- **Authentication:** add login/signup so the app recognizes individual users and scopes projects and tasks to the logged-in user, turning this into a real multi-user product instead of a single shared dataset.
