@@ -7,12 +7,19 @@ import ConfirmDialog from "./ConfirmDialog";
 export default function ProjectCard({ project }) {
   const { tasks, deleteProject } = useApp();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   const projectTasks = tasks.filter((t) => t.projectId === project.id);
   const doneCount = projectTasks.filter((t) => t.status === "done").length;
 
-  function handleDelete() {
-    deleteProject(project.id);
-    setConfirmOpen(false);
+  async function handleDelete() {
+    setDeleteError("");
+    try {
+      await deleteProject(project.id);
+      setConfirmOpen(false);
+    } catch (err) {
+      setDeleteError("Failed to delete project. Please try again.");
+      setConfirmOpen(false);
+    }
   }
 
   return (
@@ -27,6 +34,9 @@ export default function ProjectCard({ project }) {
           {doneCount}/{projectTasks.length} tasks done
         </span>
       </Link>
+
+      {deleteError && <p className="form-error">{deleteError}</p>}
+
       <div className="card-actions">
         <Button variant="danger" onClick={() => setConfirmOpen(true)}>
           Delete
