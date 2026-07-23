@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-const API_URL = "https://gdtq5t-5000.csb.app";
+const API_URL = import.meta.env.VITE_API_URL || "https://gdtq5t-5000.csb.app";
 
 const AppContext = createContext();
 
